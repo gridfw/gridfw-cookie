@@ -1,0 +1,33 @@
+{
+  "name": "gridfw-cookie",
+  "version": "1.0.0",
+  "description": "cookie plugin for GridFW",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gridfw/gridfw-cookie.git"
+  },
+  "keywords": [
+    "cookie",
+    "parser",
+    "cookie"
+  ],
+  "author": "khalid rafik",
+  "license": "MIT",
+  "devDependencies": {
+    "cli-table": "^0.3.1",
+    "gulp": "^4.0.0",
+    "gulp-chug": "^0.5.1",
+    "gulp-coffeescript": "0.0.15",
+    "gulp-include": "^2.3.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-util": "^3.0.8"
+  },
+  "bugs": {
+    "url": "https://github.com/gridfw/gridfw-cookie/issues"
+  },
+  "homepage": "https://github.com/gridfw/gridfw-cookie#readme"
+}
