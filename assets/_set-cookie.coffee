@@ -5,6 +5,7 @@
 ###
 setCookie= (name, value, options)->
 	throw new Error 'Cookie name required' unless name
+	options ?= Object.create null
 	# stringify value
 	unless typeof value is 'string'
 		value = value and ('j:' + JSON.stringify value) or ''
@@ -18,7 +19,7 @@ setCookie= (name, value, options)->
 	# path
 	options.path ?= '/'
 	# set as header
-	@res.header 'Set-Cookie', cookie.serialize name, value, options
+	@res.addHeader 'Set-Cookie', cookie.serialize name, value, options
 	# chain
 	this
 

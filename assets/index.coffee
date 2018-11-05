@@ -35,13 +35,13 @@ module.exports=
 		Object.defineProperties app.Context.prototype,
 			# get cookies
 			cookies: get: parseCookies
-			signedCookies: get: parseSignedCookies
+			signedCookies: get: parseCookies
 			# set cookie
 			cookie: value: setCookie
 			clearCookie: value: clearCookie
 		# Request
 		Object.defineProperties app.Request.prototype,
 			cookies: get: parseCookies
-			signedCookies: get: parseSignedCookies
+			signedCookies: get: parseCookies
 		# end
 		return
