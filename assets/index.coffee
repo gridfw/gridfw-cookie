@@ -8,22 +8,15 @@ cookie = require 'cookie'
 signature = require 'cookie-signature'
 sign = signature.sign
 
-# get cookie
-
+#=include _set-cookie.coffee
+#=include _parse-cookies.coffee
 
 # reload
+_parseCookies = null
 module.exports=
 	name: 'cookie-parser'
-	GridFWVersion: '0.x.x'
-	# init plugin
+	# init/reload the plugin
 	reload: (app, settings)->
-		#=include _parse-cookies.coffee
-		#=include _set-cookie.coffee
-		# ignore if already has methods
-		if app.Context.cookies
-			app.info 'Cookie-parser', 'App has already cookie parser set'
-			return
-		# check options
 		settings ?= Object.create null
 		# secret
 		_secret = settings.secret
@@ -31,17 +24,38 @@ module.exports=
 			_secret = [_secret] unless Array.isArray _secret
 			for s in _secret
 				throw new Error '"settings.secret" must be either string or list or strings' unless typeof s is 'string'
+		# cookie parser
+		_parseCookies = createCookieParser settings
+		# enable
+		@enable app
+		return
+	# disable the plugin
+	# disable: (app)->
+	# 	app.info 'cookie-parser', 'This plugin could not be disabled'
+	# enable the plugin
+	enable: (app)->
 		# Context plugins
 		Object.defineProperties app.Context.prototype,
 			# get cookies
-			cookies: get: parseCookies
-			signedCookies: get: parseCookies
+			cookies:
+				get: _parseCookies
+				configurable: on
+			signedCookies:
+				get: _parseCookies
+				configurable: on
 			# set cookie
-			cookie: value: setCookie
-			clearCookie: value: clearCookie
+			cookie:
+				value: setCookie
+				configurable: on
+			clearCookie:
+				value: clearCookie
+				configurable: on
 		# Request
 		Object.defineProperties app.Request.prototype,
-			cookies: get: parseCookies
-			signedCookies: get: parseCookies
-		# end
+			cookies:
+				get: _parseCookies
+				configurable: on
+			signedCookies:
+				get: _parseCookies
+				configurable: on
 		return
