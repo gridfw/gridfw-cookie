@@ -7,12 +7,15 @@ setCookie= (name, value, options)->
 	throw new Error 'Cookie name required' unless name
 	options ?= Object.create null
 	# stringify value
-	unless typeof value is 'string'
-		value = value and ('j:' + JSON.stringify value) or ''
+	if typeof value is 'string'
+		value = '..' + value
+	else if value?
+		value = 'j.' + JSON.stringify value
+	else
+		value = '..'
 	# signe cookie
-	if options.signed
-		throw new Error 'No secret set to signe this cookie!' unless _secret
-		value = 's:' + sign value, _secret
+	if _secret
+		value = 's.' + AESCrypto.encrypt value, _secret
 	# max age
 	if 'maxAge' of options
 		options.expires = new Date Date.now() + options.maxAge

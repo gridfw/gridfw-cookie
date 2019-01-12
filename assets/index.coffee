@@ -5,11 +5,8 @@
 'use strict'
 
 cookie = require 'cookie'
-signature = require 'cookie-signature'
-sign = signature.sign
-
-#=include _set-cookie.coffee
-#=include _parse-cookies.coffee
+CryptoJS = require('crypto-js')
+AESCrypto = CryptoJS.AES
 
 # reload
 _parseCookies = null
@@ -18,22 +15,14 @@ module.exports=
 	# init/reload the plugin
 	reload: (app, settings)->
 		settings ?= Object.create null
+		#=include _set-cookie.coffee
+		#=include _parse-cookies.coffee
 		# secret
 		_secret = settings.secret
-		if _secret
-			_secret = [_secret] unless Array.isArray _secret
-			for s in _secret
-				throw new Error '"settings.secret" must be either string or list or strings' unless typeof s is 'string'
+		throw new Error "settings.secret expected string or null" if _secret and typeof _secret isnt 'string'
 		# cookie parser
-		_parseCookies = createCookieParser settings
+		_parseCookies = parseCookie
 		# enable
-		@enable app
-		return
-	# disable the plugin
-	# disable: (app)->
-	# 	app.info 'cookie-parser', 'This plugin could not be disabled'
-	# enable the plugin
-	enable: (app)->
 		# Context plugins
 		Object.defineProperties app.Context.prototype,
 			# get cookies
@@ -59,3 +48,9 @@ module.exports=
 				get: _parseCookies
 				configurable: on
 		return
+	# disable the plugin
+	# disable: (app)->
+	# 	app.info 'cookie-parser', 'This plugin could not be disabled'
+	# enable the plugin
+	# enable: (app)->
+	# 	return
