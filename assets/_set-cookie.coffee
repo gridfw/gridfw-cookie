@@ -25,15 +25,3 @@ setCookie= (name, value, options)->
 	@res.addHeader 'Set-Cookie', cookie.serialize name, value, options
 	# chain
 	this
-
-
-###*
- * Clear cookie
- * @example
- * ctx.clearCookie('name', options)
-###
-clearCookie = (name, options)->
-	options ?= Object.create null
-	options.expires ?= new Date 1
-	options.path	?= '/'
-	@cookie name, '', options

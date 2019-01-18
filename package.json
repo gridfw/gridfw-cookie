@@ -1,6 +1,6 @@
 {
   "name": "gridfw-cookie",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "cookie plugin for GridFW",
   "main": "build/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "gulp-coffeescript": "0.0.15",
     "gulp-include": "^2.3.1",
     "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^3.0.8"
   },
   "bugs": {
