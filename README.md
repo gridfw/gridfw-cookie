@@ -1,2 +1,5 @@
 # gridfw-cookie
-cookie plugin for gridfw
+cookie parser plugin for gridfw
+
+# Supporters
+[![coredigix](https://www.coredigix.com/img/logo.png)](https://coredigix.com)
