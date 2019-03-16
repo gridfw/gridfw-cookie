@@ -8,6 +8,18 @@ cookie = require 'cookie'
 CryptoJS = require('crypto-js')
 AESCrypto = CryptoJS.AES
 
+
+###*
+ * Clear cookie
+ * @example
+ * ctx.clearCookie('name', options)
+###
+_clearCookie= (name, options)->
+	options ?= Object.create null
+	options.expires ?= new Date 1
+	options.path	?= '/'
+	@cookie name, '', options
+
 class Cookie
 	constructor: (@app)->
 		@enabled = on # the plugin is enabled
@@ -21,9 +33,30 @@ class Cookie
 		# secret
 		_secret = settings.secret
 		throw new Error "settings.secret expected string or null" if _secret and typeof _secret isnt 'string'
-		# cookie parser
-		@_parseCookie = parseCookie
-		@_setCookie = setCookie
+		# properties
+		@fxes=
+			Request: Object.create null,
+				cookies:
+					get: parseCookie
+					configurable: on
+				signedCookies:
+					get: parseCookie
+					configurable: on
+			Context: Object.create null,
+				# get cookies
+				cookies:
+					get: parseCookie
+					configurable: on
+				signedCookies:
+					get: parseCookie
+					configurable: on
+				# set cookie
+				cookie:
+					value: setCookie
+					configurable: on
+				clearCookie:
+					value: _clearCookie
+					configurable: on
 		# enable
 		@enable()
 		return
@@ -31,67 +64,15 @@ class Cookie
 	 * destroy
 	###
 	destroy: ->
-		emptyObj=
-			value: null
-			configurable: on
-		Object.defineProperties @app.Context.prototype,
-			# get cookies
-			cookies: emptyObj
-			signedCookies: emptyObj
-			# set cookie
-			cookie: emptyObj
-			clearCookie: emptyObj
-		# Request
-		emptyCookie =
-			get: -> {}
-			configurable: on
-		Object.defineProperties @app.Request.prototype,
-			cookies: emptyCookie
-			signedCookies: emptyCookie
+		@app.removeProperties 'Cookie', @fxes
 		return
 	###*
 	 * Disable, enable
 	###
 	disable: -> @destroy
 	enable: ->
-		# methods
-		parseCookie = @_parseCookie
-		setCookie = @_setCookie
-		clearCookie = @_clearCookie
 		# Context plugins
-		Object.defineProperties @app.Context.prototype,
-			# get cookies
-			cookies:
-				get: parseCookie
-				configurable: on
-			signedCookies:
-				get: parseCookie
-				configurable: on
-			# set cookie
-			cookie:
-				value: setCookie
-				configurable: on
-			clearCookie:
-				value: clearCookie
-				configurable: on
-		# Request
-		Object.defineProperties @app.Request.prototype,
-			cookies:
-				get: parseCookie
-				configurable: on
-			signedCookies:
-				get: parseCookie
-				configurable: on
+		@app.addProperties 'Cookie', @fxes
 		return
 
-	###*
-	 * Clear cookie
-	 * @example
-	 * ctx.clearCookie('name', options)
-	###
-	_clearCookie: (name, options)->
-		options ?= Object.create null
-		options.expires ?= new Date 1
-		options.path	?= '/'
-		@cookie name, '', options
 module.exports = Cookie
