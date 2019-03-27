@@ -36,27 +36,20 @@ class Cookie
 		# properties
 		@fxes=
 			Request: Object.create null,
-				cookies:
-					get: parseCookie
-					configurable: on
-				signedCookies:
-					get: parseCookie
-					configurable: on
+				cookies:		get: parseCookie
+				# signedCookies:
+				# 	get: parseCookie
+				# 	configurable: on
 			Context: Object.create null,
 				# get cookies
-				cookies:
-					get: parseCookie
-					configurable: on
-				signedCookies:
-					get: parseCookie
-					configurable: on
+				cookies:		get: parseCookie
+				# signedCookies:
+				# 	get: parseCookie
+				# 	configurable: on
 				# set cookie
-				cookie:
-					value: setCookie
-					configurable: on
-				clearCookie:
-					value: _clearCookie
-					configurable: on
+				cookie:			value: setCookie
+				setCookie:		value: setCookie
+				clearCookie:	value: _clearCookie
 		# enable
 		@enable()
 		return
