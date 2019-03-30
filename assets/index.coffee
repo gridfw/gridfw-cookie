@@ -8,6 +8,9 @@ cookie = require 'cookie'
 CryptoJS = require('crypto-js')
 AESCrypto = CryptoJS.AES
 
+# utils
+_defineProperty= Object.defineProperty
+
 
 ###*
  * Clear cookie
@@ -36,16 +39,20 @@ class Cookie
 		# properties
 		@fxes=
 			Request: Object.create null,
-				cookies:		get: parseCookie
-				# signedCookies:
-				# 	get: parseCookie
-				# 	configurable: on
+				cookies:
+					get: parseCookie
+					configurable: on
+				signedCookies:
+					get: parseCookie
+					configurable: on
 			Context: Object.create null,
 				# get cookies
-				cookies:		get: parseCookie
-				# signedCookies:
-				# 	get: parseCookie
-				# 	configurable: on
+				cookies:
+					get: ->
+						cookies= @req.cookies
+						_defineProperty this, 'cookies', value: cookies
+						cookies
+					configurable: on
 				# set cookie
 				cookie:			value: setCookie
 				setCookie:		value: setCookie

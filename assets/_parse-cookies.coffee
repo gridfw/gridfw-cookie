@@ -2,7 +2,7 @@
 Parse cookies
 ###
 parseCookie = ->
-	cookieHeader = @req.headers.cookie
+	cookieHeader = @headers.cookie
 	cookies = cookieHeader and (cookie.parse cookieHeader, settings) or Object.create null
 	# parse JSON
 	for k,v of cookies
