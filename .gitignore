@@ -63,3 +63,4 @@ typings/
 # 
 gulp-file.tmp.*.js
 build/*
+package-lock.json
